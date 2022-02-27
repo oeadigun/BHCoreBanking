@@ -7,16 +7,26 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.10" />
+    <PackageReference Include="NUnit" Version="3.13.1" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="BHCoreBanking.Core\**" />
+    <Compile Remove="BHCoreBanking.Services\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="BHCoreBanking.Core\**" />
+    <Content Remove="BHCoreBanking.Services\**" />
+    <EmbeddedResource Remove="BHCoreBanking.Core\**" />
+    <EmbeddedResource Remove="BHCoreBanking.Services\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="BHCoreBanking.Core\**" />
+    <None Remove="BHCoreBanking.Services\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 

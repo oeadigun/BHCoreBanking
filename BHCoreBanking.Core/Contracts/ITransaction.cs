@@ -10,7 +10,7 @@ namespace BHCoreBanking.Core.Contracts
     {
         long AccountID { get; set; }
         decimal Amount { get; set; }
-        PostingType 
+        PositionType RecordType { get; set; }
         TransactionStatus Status { get; set; }
         DateTime TransactionDate { get; set; }
     }

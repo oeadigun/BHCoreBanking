@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace BHCoreBanking.Core.Enums
 {
-    public enum PostingType
+    public enum PositionType
     {
+        Debit = 1,
+        Credit
     }
 }

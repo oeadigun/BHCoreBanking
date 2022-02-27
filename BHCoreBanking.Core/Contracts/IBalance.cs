@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace BHCoreBanking.Core.Contracts
 {
-    public interface IAccount : IEntity
-    { 
-        long CustomerID { get; set; }
-        AccountType Type { get; set; }
-        IBalance Balance { get; set; }
+    public interface IBalance
+    {
+        string CurrencyCode { get; set; }
+        PositionType Position { get; set; }
+        decimal Amount { get; set; }
     }
 }
