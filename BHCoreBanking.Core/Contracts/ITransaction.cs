@@ -8,9 +8,11 @@ namespace BHCoreBanking.Core.Contracts
 {
     public interface ITransaction : IEntity
     {
-        long AccountID { get; set; }
+        long DebitAccountID { get; set; }
+        long CreditAccountID { get; set; }
         decimal Amount { get; set; }
-        PositionType RecordType { get; set; }
+        string FailureMessage { get; set; }
+        Guid TransactionReference { get; set; } 
         TransactionStatus Status { get; set; }
         DateTime TransactionDate { get; set; }
     }

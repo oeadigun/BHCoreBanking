@@ -10,6 +10,7 @@ namespace BHCoreBanking.Core.Contracts
     public interface IAccount : IEntity
     { 
         long CustomerID { get; set; }
+        string AccountNumber { get; set; }
         AccountType Type { get; set; }
         IBalance Balance { get; set; }
     }

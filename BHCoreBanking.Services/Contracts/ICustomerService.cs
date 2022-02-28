@@ -10,7 +10,8 @@ namespace BHCoreBanking.Services.Contracts
 {
     public interface ICustomerService
     {
-        ICustomer CreateCustomer(ICustomerCreationRequest request);
-        ICustomer GetCustomerDetails(long id); 
+        Task<ICustomer> CreateCustomerAsync(ICustomerCreationRequest request);
+        Task<ICustomer> GetCustomerDetailsAsync(long id);
+        Task<IEnumerable<ICustomer>> GetCustomersAsync();
     }
 }

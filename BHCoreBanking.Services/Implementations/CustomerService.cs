@@ -1,4 +1,6 @@
 ﻿using BHCoreBanking.Core.Contracts;
+using BHCoreBanking.Core.Implementations;
+using BHCoreBanking.Data.Contracts;
 using BHCoreBanking.Services.Contracts;
 using BHCoreBanking.Services.Contracts.ServiceRequests;
 using System;
@@ -10,15 +12,31 @@ using System.Threading.Tasks;
 namespace BHCoreBanking.Services.Implementations
 {
     public class CustomerService : ICustomerService
-    { 
-        public ICustomer CreateCustomer(ICustomerCreationRequest request)
+    {
+        private readonly IRepository<ICustomer> _repo;
+        public CustomerService(IRepository<ICustomer> repository)
         {
-            throw new NotImplementedException();
+            _repo = repository;
+        }
+        public async Task<ICustomer> CreateCustomerAsync(ICustomerCreationRequest request)
+        {
+            var customer = new Customer()
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName
+            };
+
+            return await _repo.InsertAsync(customer);
         }
 
-        public ICustomer GetCustomerDetails(long id)
+        public async Task<ICustomer> GetCustomerDetailsAsync(long id)
         {
-            throw new NotImplementedException();
+            return await _repo.GetAsync(id);
+        }
+
+        public Task<IEnumerable<ICustomer>> GetCustomersAsync()
+        {
+            return _repo.SearchAsync(t => t.ID > 0);
         }
     }
 }

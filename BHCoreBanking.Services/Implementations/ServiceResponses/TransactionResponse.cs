@@ -9,7 +9,8 @@ namespace BHCoreBanking.Services.Implementations.ServiceResponses
 {
     public class TransactionResponse
     {
-        TransactionStatus Status { get; set; }
-        string ResponseMessage { get; set; }
+        public TransactionStatus Status { get; set; }
+        public string TransactionReference { get; set; }
+        public string ResponseMessage { get; set; }
     }
 }

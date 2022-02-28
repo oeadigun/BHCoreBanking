@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BHCoreBanking.Core.Constants
 {
-    public static class CurrencyCode
+    public static class CurrencyCodes
     {
-        const string USD = "USD";
-        const string GBP = "GBP";
-        const string EUR = "EUR";
+        public const string USD = "USD";
+        public const string GBP = "GBP";
+        public const string EUR = "EUR";
     }
 }

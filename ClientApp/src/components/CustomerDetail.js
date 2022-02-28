@@ -1,9 +1,10 @@
 import React, { Component, useState  } from 'react';
 import { Modal, Button } from "react-bootstrap";
+import urlparse from "url-parse";
 import { useHistory, useNavigate  } from "react-router-dom";
 
-export class FetchData extends Component {
-  static displayName = FetchData.name;
+export class CustomerDetail extends Component {
+  static displayName = CustomerDetail.name;
 
   constructor(props) {
       super(props);
@@ -39,14 +40,16 @@ export class FetchData extends Component {
     onChange = e => this.setState({ [e.target.name]: e.target.value })
 
     create(event) {
-        event.preventDefault(); 
+        event.preventDefault();
+        const urlData = urlparse(window.location.href, true) 
         const postRequest = {
-            "firstname": this.state.firstName,
-            "lastname": this.state.lastName
+            "initialCreditDeposit": this.state.amount,
+            "currencyCode": 'USD',
+            "customerID": urlData.query.id
         };
         const jsonData = JSON.stringify(postRequest);
 
-        fetch("api/customers", {
+        fetch("api/accounts", {
             body: jsonData,
             method: 'POST', headers:
             {
@@ -64,11 +67,11 @@ export class FetchData extends Component {
      
 
      viewDetails = (event) => {  
-        event.preventDefault();
+         event.preventDefault(); 
          const { param } = event.target.dataset;
-       /*  const navigate = useHistory();*/
-         window.location.href = window.location.origin + window.location.pathname + `customers?id=${param}`;
-        // navigate(`/accounts/${param}`);
+         const urlData = urlparse(window.location.href, true)
+         window.location.href = window.location.origin + `/accounts?id=${param}&customerID=${urlData.query.id}`;
+        
     }
 
 
@@ -79,20 +82,22 @@ export class FetchData extends Component {
         <thead>
           <tr>
             <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th>Account Number</th>
+                    <th>Currency</th>
+                    <th>Balance</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           {forecasts.map(forecast =>
-            <tr key={forecast.firstName}>
+            <tr key={forecast.id}>
               <td>{forecast.id}</td>
-              <td>{forecast.firstName}</td>
-                  <td>{forecast.lastName}</td>
+                  <td>{forecast.accountNumber}</td>
+                  <td>{forecast.balance.currencyCode}</td>
+                  <td>{forecast.balance.amount}</td>
                   <td style={{ width: "150px" }}>
                       <button data-param={forecast.id} className="btn btn-primary" type="button" onClick={this.viewDetails}>
-                      View Accounts
+                      View Transactions
                      </button>
                   </td>
             </tr>
@@ -109,7 +114,7 @@ export class FetchData extends Component {
 
       return ( 
       <div>
-        <h1 id="tabelLabel">Customers</h1>  
+        <h1 id="tabelLabel">Accounts</h1>  
 
             <Modal
                 show={this.state.show}
@@ -118,21 +123,17 @@ export class FetchData extends Component {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Create Customer</Modal.Title>
+                    <Modal.Title>Create Account</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div> 
                         <div> 
                             <div>  
                                     <div className="form-group">
-                                      <label>First Name</label>
-                                      <input type="text" name="firstName" onChange={this.onChange} value={this.state.firstName} className="form-control" id="firstName"  />
+                                      <label>Amount</label>
+                                      <input type="number" name="amount" onChange={this.onChange} value={this.state.amount} className="form-control" id="amount"  />
                                     </div>
-                                    <div className="form-group">
-                                      <label>Last Name</label>
-                                      <input type="text" name="lastName" onChange={this.onChange} value={this.state.lastName} className="form-control" id="lastname"  />
-                                    </div> 
-                                   
+                                    
                             </div>
                             <span></span>
                         </div>
@@ -143,9 +144,24 @@ export class FetchData extends Component {
                     <Button variant="primary" type="submit" onClick={this.create}>Create</Button>
                 </Modal.Footer>
             </Modal>
+              <div>
+                  <div>
+                      <div >
+                          <div className="form-group">
+                              <label>First Name</label>
+                              <input type="text" name="firstName" disabled={true}   value={this.state.firstName} className="form-control" id="firstName" />
+                             </div>
+                          <div className="form-group">
+                              <label>Last Name</label>
+                              <input type="text" name="lastName" disabled={true}  value={this.state.lastName} className="form-control" id="lastname" />
+                          </div>
 
-            <button className="btn btn-primary" type="button" style={{ marginLeft: "86%" }} onClick={this.showModal}>
-                Create Customer
+                      </div>
+                      <span></span>
+                  </div>
+              </div>
+              <button className="btn btn-primary" type="button" style={{ marginLeft: "86%", marginTop: "10px" }} onClick={this.showModal}>
+                Create Account
               </button>
 
               <Modal
@@ -158,7 +174,7 @@ export class FetchData extends Component {
                   </Modal.Header>
                
                   <Modal.Body>
-                      <label>Customer Created Successfully</label>
+                      <label>Account Created Successfully</label>
                   </Modal.Body>
                   <Modal.Footer> 
                       <Button variant="primary" onClick={this.hideSuccessModal}>Ok</Button>
@@ -169,9 +185,13 @@ export class FetchData extends Component {
     );
   }
 
-  async populateWeatherData() {
-    const response = await fetch('api/customers');
+    async populateWeatherData() { 
+    const urlData = urlparse(window.location.href, true)
+    const response = await fetch(`api/accounts/customer/${urlData.query.id}`);
     const data = await response.json();
-      this.setState({ forecasts: data.data, loading: false });
+
+    const customerResponse = await fetch(`api/customers/${urlData.query.id}`);
+    const customerData = await customerResponse.json();
+        this.setState({ forecasts: data.data, loading: false, firstName: customerData.data.firstName, lastName: customerData.data.lastName });
     } 
 }

@@ -13,7 +13,8 @@ namespace BHCoreBanking.Services.Contracts
 {
     public interface ITransactionService
     {
-        public IEnumerable<ITransaction> GetTransactions(ITransactionSearchRequest request);
-        public TransactionResponse PostTransaction(ITransactionPostingRequest request);
+        Task<IEnumerable<ITransaction>> GetTransactionsAsync(ITransactionSearchRequest request);
+        Task<TransactionResponse> PostTransactionAsync(ITransactionPostingRequest request); 
+        Task<IEnumerable<ITransaction>> GetTransactionsByAccountIDAsync(long accountID);
     }
 }
